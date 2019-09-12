@@ -8,8 +8,8 @@ language_tabs: # must be one of https://git.io/vQNgJ
   - javascript
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
-  - <a href='https://github.com/lord/slate'>Documentation Powered by Slate</a>
+  - <a href='https://roadster.com/contact'>Contact us for your developer key</a>
+  - <a href='https://roadster.com'>Become a Roadster Dealer</a>
 
 includes:
   - errors
@@ -19,221 +19,144 @@ search: true
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+Access to Roadster APIs is limited to current dealer, manufacturer or data partners. We support a limited set of endpoints that allow our partners to access certain features of the Roadster platform for use externally or to pass us data required to better integrate our systems into the dealer's software ecosystem.
 
-We have language bindings in Shell, Ruby, Python, and JavaScript! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
-
-This example API documentation page was created with [Slate](https://github.com/lord/slate). Feel free to edit it and use it as a base for your own API's documentation.
+This initial API documentation has been produced to help introduce our partners to our data and experience endpoints. For additional quesitons, please contact our support teams at [dealersupport@roadster.com](mailto:dealersupport@roadster.com)
 
 # Authentication
 
-> To authorize, use this code:
+## Token-based API endpoints
+
+> Examples of using the key-based API authorization.
 
 ```ruby
-require 'kittn'
+require 'net/http'
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
+req = Net::HTTP::Post.new('https://express-dealer-site/api')
+req['Authorization'] = 'your_api_key'
 ```
 
 ```shell
 # With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
+curl "https://express-dealer-site/api"
+  -H "Authorization: your_api_key"
 ```
 
-```javascript
-const kittn = require('kittn');
+> Make sure to replace `your_api_key` with your API key and `express-dealer-site` with the hostname of the Express Store for the dealership you are attempting to access.
 
-let api = kittn.authorize('meowmeowmeow');
-```
+Authentication method depends on the endpoint being used. In general, you should have been provided an API key that you will use in the header of each of your calls. For applications that will be passing us customer records as part of the user interface, you will instead encrypt the data to AES-256-CBC standards using a cipher key provided by Roadster.
 
-> Make sure to replace `meowmeowmeow` with your API key.
-
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
+`Authorization: your_api_key`
 
 <aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
+You must replace <code>your_api_key</code> with your personal API key.
 </aside>
 
-# Kittens
+## Browser-based data passing
 
-## Get All Kittens
+> Examples of using a public encryption key
 
 ```ruby
-require 'kittn'
+require 'openssl'
+require 'base64'
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
+key = Base64.decode64("your_encryption_key")
+key = Digest::SHA256.digest(key) if(key.kind_of?(String) && 32 != key.bytesize)
+aes = OpenSSL::Cipher.new('AES-256-CBC')
+aes.encrypt
+aes.key = key
+iv = aes.random_iv
 ```
 
 ```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
+# With shell you can use OpenSSL to encrypt and decrypt data
+
+echo data | openssl aes-256-cbc -a -salt
+enter aes-256-cbc encryption password: your_encryption_key
+Verifying - enter aes-256-cbc encryption password: your_encryption_key
 ```
 
-```javascript
-const kittn = require('kittn');
+> Make sure to replace `your_encryption_key` with your API key and the base URL with the URL of the dealership you are attempting to access.
 
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
+Passing data to Roadster via the browser is possible using encrypted query parameters. Encryption to AES-256-CBC standards is required using an encryption key provided to you by Roadster. All parameters should be encrypted before passing them via the URL query string.
+
+<aside class="notice">
+You must replace <code>your_encryption_key</code> with your personal encryption key.
+</aside>
+
+
+# Secure Customer Referral
+
+## Browser-based customer submission
+
+```ruby
+require 'openssl'
+require 'base64'
+
+def aes256_cbc_encrypt(key, data)
+  key = Digest::SHA256.digest(key) if(key.kind_of?(String) && 32 != key.bytesize)
+  aes = OpenSSL::Cipher.new('AES-256-CBC')
+  aes.encrypt
+  aes.key = key
+  iv = aes.random_iv
+  return aes.update(data) + aes.final, iv
+end
+
+def generate_link(vin, key = "your_encryption_key")
+  data = {fname: 'Testing', lname: 'Bot', email: 'testing@roadster.com', phone: '800-505-1000'}
+
+  block, iv = aes256_cbc_encrypt key, data.to_query
+  mem_token = Base64.encode64(iv + block)
+  escaped_token = CGI.escape mem_token
+  url = "/express/" + vin + "?mem=" + escaped_token
+end
 ```
 
-> The above command returns JSON structured like this:
+```shell
+# The query string should be URL encoded BEFORE encryption
 
-```json
-[
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
-  }
-]
+echo "fname%3DTesting%26lname%3DBot%26email%3Dtesting%40roadster.com%26phone%3D800-505-1000" | openssl aes-256-cbc -a -salt
+enter aes-256-cbc encryption password: your_encryption_key
+Verifying - enter aes-256-cbc encryption password: your_encryption_key
+
+curl "https://express-dealer-site/express/[vin]?mem=" + encryption_result
 ```
 
-This endpoint retrieves all kittens.
+> The customer data should be URL encoded _before_ encryption
+
+
+This browser-based URL request format allows partners to securely pass customer data into the Roadster platform using URL query parameters. The customer data is then used to create an account on the dealer's Express Storefront and bypass any price locks that may be enabled for that dealership. The request also results in lead submission consistent with the lead routing rules the dealership has setup for "Unlock Inquiry" lead types.
 
 ### HTTP Request
 
-`GET http://example.com/api/kittens`
+`GET https://express-dealer-site/express/[vin]?mem=[encrypted_parameters]`
 
 ### Query Parameters
 
-Parameter | Default | Description
+Parameter | Required | Description
 --------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
+vin | yes | The vehicle identification number of the requested details landing page.
+encrypted_parameters | yes | The customer's encrypted contact information (see detail below).
 
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
+<aside class="notice">
+Replace the <code>express-dealer-site</code> with the hostname for the dealership you are referring to.
 </aside>
 
-## Get a Specific Kitten
+The `mem` query parameter should contain the encrypted URL query string of the customer's contact information that you are referring to the dealership. This contact information can include any of the following key / value pairs:
 
-```ruby
-require 'kittn'
+Parameter | Required | Description
+--------- | ------- | -----------
+fname | no | The first name of the customer.
+lname | no | The last name of the customer.
+email | yes | The email address of the customer (used as the unique identifier for each dealership).
+phone | no | The phone number of the customer
+custid | no | A unique identifier from the attribution source (only used for reporting purposes).
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
 
-```python
-import kittn
+<aside class="notice">
+These parameters should be places in a standard URL query string and URL encoded _before_ encryption.
+E.g. <code>fname%3DTesting%26lname%3DBot%26email%3Dtesting%40roadster.com%26phone%3D800-505-1000</code>
+</aside>
 
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
 
-```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
-}
-```
-
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
-
-### HTTP Request
-
-`GET http://example.com/kittens/<ID>`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
-
-## Delete a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -X DELETE
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-  "id": 2,
-  "deleted" : ":("
-}
-```
-
-This endpoint deletes a specific kitten.
-
-### HTTP Request
-
-`DELETE http://example.com/kittens/<ID>`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to delete
 
