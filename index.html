@@ -226,18 +226,20 @@
           </li>
           <li>
             <a href="#authentication" class="toc-h1 toc-link" data-title="Authentication">Authentication</a>
-          </li>
-          <li>
-            <a href="#kittens" class="toc-h1 toc-link" data-title="Kittens">Kittens</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#get-all-kittens" class="toc-h2 toc-link" data-title="Get All Kittens">Get All Kittens</a>
+                    <a href="#token-based-api-endpoints" class="toc-h2 toc-link" data-title="Token-based API endpoints">Token-based API endpoints</a>
                   </li>
                   <li>
-                    <a href="#get-a-specific-kitten" class="toc-h2 toc-link" data-title="Get a Specific Kitten">Get a Specific Kitten</a>
+                    <a href="#browser-based-data-passing" class="toc-h2 toc-link" data-title="Browser-based data passing">Browser-based data passing</a>
                   </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#secure-customer-referral" class="toc-h1 toc-link" data-title="Secure Customer Referral">Secure Customer Referral</a>
+              <ul class="toc-list-h2">
                   <li>
-                    <a href="#delete-a-specific-kitten" class="toc-h2 toc-link" data-title="Delete a Specific Kitten">Delete a Specific Kitten</a>
+                    <a href="#browser-based-customer-submission" class="toc-h2 toc-link" data-title="Browser-based customer submission">Browser-based customer submission</a>
                   </li>
               </ul>
           </li>
@@ -246,198 +248,169 @@
           </li>
       </ul>
         <ul class="toc-footer">
-            <li><a href='#'>Sign Up for a Developer Key</a></li>
-            <li><a href='https://github.com/lord/slate'>Documentation Powered by Slate</a></li>
+            <li><a href='https://roadster.com/contact'>Contact us for your developer key</a></li>
+            <li><a href='https://roadster.com'>Become a Roadster Dealer</a></li>
         </ul>
     </div>
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
         <h1 id='introduction'>Introduction</h1>
-<p>Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.</p>
+<p>Access to Roadster APIs is limited to current dealer, manufacturer or data partners. We support a limited set of endpoints that allow our partners to access certain features of the Roadster platform for use externally or to pass us data required to better integrate our systems into the dealer&#39;s software ecosystem.</p>
 
-<p>We have language bindings in Shell, Ruby, Python, and JavaScript! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
-
-<p>This example API documentation page was created with <a href="https://github.com/lord/slate">Slate</a>. Feel free to edit it and use it as a base for your own API&#39;s documentation.</p>
-<h1 id='authentication'>Authentication</h1>
+<p>This initial API documentation has been produced to help introduce our partners to our data and experience endpoints. For additional quesitons, please contact our support teams at <a href="mailto:dealersupport@roadster.com">dealersupport@roadster.com</a></p>
+<h1 id='authentication'>Authentication</h1><h2 id='token-based-api-endpoints'>Token-based API endpoints</h2>
 <blockquote>
-<p>To authorize, use this code:</p>
+<p>Examples of using the key-based API authorization.</p>
 </blockquote>
-<pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
+<pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'net/http'</span>
 
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">kittn</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
+<span class="n">req</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Post</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'https://express-dealer-site/api'</span><span class="p">)</span>
+<span class="n">req</span><span class="p">[</span><span class="s1">'Authorization'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'your_api_key'</span>
 </code></pre><pre class="highlight shell tab-shell"><code><span class="c"># With shell, you can just pass the correct header with each request</span>
-curl <span class="s2">"api_endpoint_here"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
-
-<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
+curl <span class="s2">"https://express-dealer-site/api"</span>
+  -H <span class="s2">"Authorization: your_api_key"</span>
 </code></pre>
 <blockquote>
-<p>Make sure to replace <code>meowmeowmeow</code> with your API key.</p>
+<p>Make sure to replace <code>your_api_key</code> with your API key and <code>express-dealer-site</code> with the hostname of the Express Store for the dealership you are attempting to access.</p>
 </blockquote>
 
-<p>Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our <a href="http://example.com/developers">developer portal</a>.</p>
+<p>Authentication method depends on the endpoint being used. In general, you should have been provided an API key that you will use in the header of each of your calls. For applications that will be passing us customer records as part of the user interface, you will instead encrypt the data to AES-256-CBC standards using a cipher key provided by Roadster.</p>
 
-<p>Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:</p>
-
-<p><code>Authorization: meowmeowmeow</code></p>
+<p><code>Authorization: your_api_key</code></p>
 
 <aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
+You must replace <code>your_api_key</code> with your personal API key.
 </aside>
-<h1 id='kittens'>Kittens</h1><h2 id='get-all-kittens'>Get All Kittens</h2><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
+<h2 id='browser-based-data-passing'>Browser-based data passing</h2>
+<blockquote>
+<p>Examples of using a public encryption key</p>
+</blockquote>
+<pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'openssl'</span>
+<span class="nb">require</span> <span class="s1">'base64'</span>
 
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">get</span>
-</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">kittn</span>
+<span class="n">key</span> <span class="o">=</span> <span class="no">Base64</span><span class="p">.</span><span class="nf">decode64</span><span class="p">(</span><span class="s2">"your_encryption_key"</span><span class="p">)</span>
+<span class="n">key</span> <span class="o">=</span> <span class="no">Digest</span><span class="o">::</span><span class="no">SHA256</span><span class="p">.</span><span class="nf">digest</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="k">if</span><span class="p">(</span><span class="n">key</span><span class="p">.</span><span class="nf">kind_of?</span><span class="p">(</span><span class="no">String</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="mi">32</span> <span class="o">!=</span> <span class="n">key</span><span class="p">.</span><span class="nf">bytesize</span><span class="p">)</span>
+<span class="n">aes</span> <span class="o">=</span> <span class="no">OpenSSL</span><span class="o">::</span><span class="no">Cipher</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'AES-256-CBC'</span><span class="p">)</span>
+<span class="n">aes</span><span class="p">.</span><span class="nf">encrypt</span>
+<span class="n">aes</span><span class="p">.</span><span class="nf">key</span> <span class="o">=</span> <span class="n">key</span>
+<span class="n">iv</span> <span class="o">=</span> <span class="n">aes</span><span class="p">.</span><span class="nf">random_iv</span>
+</code></pre><pre class="highlight shell tab-shell"><code><span class="c"># With shell you can use OpenSSL to encrypt and decrypt data</span>
 
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="o">.</span><span class="n">kittens</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-</code></pre><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/kittens"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
-
-<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
-<span class="kd">let</span> <span class="nx">kittens</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">kittens</span><span class="p">.</span><span class="nx">get</span><span class="p">();</span>
+<span class="nb">echo </span>data | openssl aes-256-cbc -a -salt
+enter aes-256-cbc encryption password: your_encryption_key
+Verifying - enter aes-256-cbc encryption password: your_encryption_key
 </code></pre>
 <blockquote>
-<p>The above command returns JSON structured like this:</p>
+<p>Make sure to replace <code>your_encryption_key</code> with your API key and the base URL with the URL of the dealership you are attempting to access.</p>
 </blockquote>
-<pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fluffums"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"calico"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">]</span><span class="w">
-</span></code></pre>
-<p>This endpoint retrieves all kittens.</p>
+
+<p>Passing data to Roadster via the browser is possible using encrypted query parameters. Encryption to AES-256-CBC standards is required using an encryption key provided to you by Roadster. All parameters should be encrypted before passing them via the URL query string.</p>
+
+<aside class="notice">
+You must replace <code>your_encryption_key</code> with your personal encryption key.
+</aside>
+<h1 id='secure-customer-referral'>Secure Customer Referral</h1><h2 id='browser-based-customer-submission'>Browser-based customer submission</h2><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'openssl'</span>
+<span class="nb">require</span> <span class="s1">'base64'</span>
+
+<span class="k">def</span> <span class="nf">aes256_cbc_encrypt</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+  <span class="n">key</span> <span class="o">=</span> <span class="no">Digest</span><span class="o">::</span><span class="no">SHA256</span><span class="p">.</span><span class="nf">digest</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="k">if</span><span class="p">(</span><span class="n">key</span><span class="p">.</span><span class="nf">kind_of?</span><span class="p">(</span><span class="no">String</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="mi">32</span> <span class="o">!=</span> <span class="n">key</span><span class="p">.</span><span class="nf">bytesize</span><span class="p">)</span>
+  <span class="n">aes</span> <span class="o">=</span> <span class="no">OpenSSL</span><span class="o">::</span><span class="no">Cipher</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'AES-256-CBC'</span><span class="p">)</span>
+  <span class="n">aes</span><span class="p">.</span><span class="nf">encrypt</span>
+  <span class="n">aes</span><span class="p">.</span><span class="nf">key</span> <span class="o">=</span> <span class="n">key</span>
+  <span class="n">iv</span> <span class="o">=</span> <span class="n">aes</span><span class="p">.</span><span class="nf">random_iv</span>
+  <span class="k">return</span> <span class="n">aes</span><span class="p">.</span><span class="nf">update</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">+</span> <span class="n">aes</span><span class="p">.</span><span class="nf">final</span><span class="p">,</span> <span class="n">iv</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nf">generate_link</span><span class="p">(</span><span class="n">vin</span><span class="p">,</span> <span class="n">key</span> <span class="o">=</span> <span class="s2">"your_encryption_key"</span><span class="p">)</span>
+  <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="ss">fname: </span><span class="s1">'Testing'</span><span class="p">,</span> <span class="ss">lname: </span><span class="s1">'Bot'</span><span class="p">,</span> <span class="ss">email: </span><span class="s1">'testing@roadster.com'</span><span class="p">,</span> <span class="ss">phone: </span><span class="s1">'800-505-1000'</span><span class="p">}</span>
+
+  <span class="n">block</span><span class="p">,</span> <span class="n">iv</span> <span class="o">=</span> <span class="n">aes256_cbc_encrypt</span> <span class="n">key</span><span class="p">,</span> <span class="n">data</span><span class="p">.</span><span class="nf">to_query</span>
+  <span class="n">mem_token</span> <span class="o">=</span> <span class="no">Base64</span><span class="p">.</span><span class="nf">encode64</span><span class="p">(</span><span class="n">iv</span> <span class="o">+</span> <span class="n">block</span><span class="p">)</span>
+  <span class="n">escaped_token</span> <span class="o">=</span> <span class="no">CGI</span><span class="p">.</span><span class="nf">escape</span> <span class="n">mem_token</span>
+  <span class="n">url</span> <span class="o">=</span> <span class="s2">"/express/"</span> <span class="o">+</span> <span class="n">vin</span> <span class="o">+</span> <span class="s2">"?mem="</span> <span class="o">+</span> <span class="n">escaped_token</span>
+<span class="k">end</span>
+</code></pre><pre class="highlight shell tab-shell"><code><span class="c"># The query string should be URL encoded BEFORE encryption</span>
+
+<span class="nb">echo</span> <span class="s2">"fname%3DTesting%26lname%3DBot%26email%3Dtesting%40roadster.com%26phone%3D800-505-1000"</span> | openssl aes-256-cbc -a -salt
+enter aes-256-cbc encryption password: your_encryption_key
+Verifying - enter aes-256-cbc encryption password: your_encryption_key
+
+curl <span class="s2">"https://express-dealer-site/express/[vin]?mem="</span> + encryption_result
+</code></pre>
+<blockquote>
+<p>The customer data should be URL encoded <em>before</em> encryption</p>
+</blockquote>
+
+<p>This browser-based URL request format allows partners to securely pass customer data into the Roadster platform using URL query parameters. The customer data is then used to create an account on the dealer&#39;s Express Storefront and bypass any price locks that may be enabled for that dealership. The request also results in lead submission consistent with the lead routing rules the dealership has setup for &quot;Unlock Inquiry&quot; lead types.</p>
 <h3 id='http-request'>HTTP Request</h3>
-<p><code>GET http://example.com/api/kittens</code></p>
+<p><code>GET https://express-dealer-site/express/[vin]?mem=[encrypted_parameters]</code></p>
 <h3 id='query-parameters'>Query Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
-<th>Default</th>
+<th>Required</th>
 <th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>include_cats</td>
-<td>false</td>
-<td>If set to true, the result will also include cats.</td>
+<td>vin</td>
+<td>yes</td>
+<td>The vehicle identification number of the requested details landing page.</td>
 </tr>
 <tr>
-<td>available</td>
-<td>true</td>
-<td>If set to false, the result will include kittens that have already been adopted.</td>
+<td>encrypted_parameters</td>
+<td>yes</td>
+<td>The customer&#39;s encrypted contact information (see detail below).</td>
 </tr>
 </tbody></table>
 
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-<h2 id='get-a-specific-kitten'>Get a Specific Kitten</h2><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">kittn</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="o">.</span><span class="n">kittens</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
-
-<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
-<span class="kd">let</span> <span class="nx">max</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">kittens</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
-</code></pre>
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-<p>This endpoint retrieves a specific kitten.</p>
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
-<h3 id='http-request-2'>HTTP Request</h3>
-<p><code>GET http://example.com/kittens/&lt;ID&gt;</code></p>
-<h3 id='url-parameters'>URL Parameters</h3>
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>ID</td>
-<td>The ID of the kitten to retrieve</td>
-</tr>
-</tbody></table>
-<h2 id='delete-a-specific-kitten'>Delete a Specific Kitten</h2><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">delete</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">kittn</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="o">.</span><span class="n">kittens</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span>
-  -X DELETE
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
-
-<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
-<span class="kd">let</span> <span class="nx">max</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">kittens</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
-</code></pre>
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"deleted"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">":("</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-<p>This endpoint deletes a specific kitten.</p>
-<h3 id='http-request-3'>HTTP Request</h3>
-<p><code>DELETE http://example.com/kittens/&lt;ID&gt;</code></p>
-<h3 id='url-parameters-2'>URL Parameters</h3>
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>ID</td>
-<td>The ID of the kitten to delete</td>
-</tr>
-</tbody></table>
-<h1 id='errors'>Errors</h1>
 <aside class="notice">
-This error section is stored in a separate file in <code>includes/_errors.md</code>. Slate allows you to optionally separate out your docs into many files...just save them to the <code>includes</code> folder and add them to the top of your <code>index.md</code>'s frontmatter. Files are included in the order listed.
+Replace the <code>express-dealer-site</code> with the hostname for the dealership you are referring to.
 </aside>
 
-<p>The Kittn API uses the following error codes:</p>
+<p>The <code>mem</code> query parameter should contain the encrypted URL query string of the customer&#39;s contact information that you are referring to the dealership. This contact information can include any of the following key / value pairs:</p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>fname</td>
+<td>no</td>
+<td>The first name of the customer.</td>
+</tr>
+<tr>
+<td>lname</td>
+<td>no</td>
+<td>The last name of the customer.</td>
+</tr>
+<tr>
+<td>email</td>
+<td>yes</td>
+<td>The email address of the customer (used as the unique identifier for each dealership).</td>
+</tr>
+<tr>
+<td>phone</td>
+<td>no</td>
+<td>The phone number of the customer</td>
+</tr>
+<tr>
+<td>custid</td>
+<td>no</td>
+<td>A unique identifier from the attribution source (only used for reporting purposes).</td>
+</tr>
+</tbody></table>
+
+<aside class="notice">
+These parameters should be places in a standard URL query string and URL encoded _before_ encryption.
+E.g. <code>fname%3DTesting%26lname%3DBot%26email%3Dtesting%40roadster.com%26phone%3D800-505-1000</code>
+</aside>
+<h1 id='errors'>Errors</h1>
+<p>Roadster APIs use the following error statuses:</p>
 
 <table><thead>
 <tr>
@@ -454,40 +427,12 @@ This error section is stored in a separate file in <code>includes/_errors.md</co
 <td>Unauthorized -- Your API key is wrong.</td>
 </tr>
 <tr>
-<td>403</td>
-<td>Forbidden -- The kitten requested is hidden for administrators only.</td>
-</tr>
-<tr>
 <td>404</td>
-<td>Not Found -- The specified kitten could not be found.</td>
-</tr>
-<tr>
-<td>405</td>
-<td>Method Not Allowed -- You tried to access a kitten with an invalid method.</td>
-</tr>
-<tr>
-<td>406</td>
-<td>Not Acceptable -- You requested a format that isn&#39;t json.</td>
-</tr>
-<tr>
-<td>410</td>
-<td>Gone -- The kitten requested has been removed from our servers.</td>
-</tr>
-<tr>
-<td>418</td>
-<td>I&#39;m a teapot.</td>
-</tr>
-<tr>
-<td>429</td>
-<td>Too Many Requests -- You&#39;re requesting too many kittens! Slow down!</td>
+<td>Not Found -- The specified dealer or resource could not be found.</td>
 </tr>
 <tr>
 <td>500</td>
 <td>Internal Server Error -- We had a problem with our server. Try again later.</td>
-</tr>
-<tr>
-<td>503</td>
-<td>Service Unavailable -- We&#39;re temporarily offline for maintenance. Please try again later.</td>
 </tr>
 </tbody></table>
 
