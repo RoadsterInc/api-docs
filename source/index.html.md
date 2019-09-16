@@ -157,7 +157,7 @@ custid | no | A unique identifier from the attribution source (only used for rep
 
 
 <aside class="notice">
-These parameters should be places in a standard URL query string and URL encoded _before_ encryption.
+These parameters should be placed in a standard URL query string and URL encoded _before_ encryption.
 E.g. <code>fname%3DTesting%26lname%3DBot%26email%3Dtesting%40roadster.com%26phone%3D800-505-1000</code>
 </aside>
 
