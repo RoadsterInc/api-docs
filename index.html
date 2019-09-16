@@ -258,6 +258,10 @@
 <p>Access to Roadster APIs is limited to current dealer, manufacturer or data partners. We support a limited set of endpoints that allow our partners to access certain features of the Roadster platform for use externally or to pass us data required to better integrate our systems into the dealer&#39;s software ecosystem.</p>
 
 <p>This initial API documentation has been produced to help introduce our partners to our data and experience endpoints. For additional quesitons, please contact our support teams at <a href="mailto:dealersupport@roadster.com">dealersupport@roadster.com</a></p>
+
+<aside class="notice">
+All requests should be made using HTTPS.
+</aside>
 <h1 id='authentication'>Authentication</h1><h2 id='token-based-api-endpoints'>Token-based API endpoints</h2>
 <blockquote>
 <p>Examples of using the key-based API authorization.</p>
@@ -405,7 +409,7 @@ Replace the <code>express-dealer-site</code> with the hostname for the dealershi
 </tbody></table>
 
 <aside class="notice">
-These parameters should be places in a standard URL query string and URL encoded _before_ encryption.
+These parameters should be placed in a standard URL query string and URL encoded _before_ encryption.
 E.g. <code>fname%3DTesting%26lname%3DBot%26email%3Dtesting%40roadster.com%26phone%3D800-505-1000</code>
 </aside>
 <h1 id='errors'>Errors</h1>
