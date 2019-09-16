@@ -22,6 +22,10 @@ Access to Roadster APIs is limited to current dealer, manufacturer or data partn
 
 This initial API documentation has been produced to help introduce our partners to our data and experience endpoints. For additional quesitons, please contact our support teams at [dealersupport@roadster.com](mailto:dealersupport@roadster.com)
 
+<aside class="notice">
+All requests should be made using HTTPS.
+</aside>
+
 # Authentication
 
 ## Token-based API endpoints
