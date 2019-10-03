@@ -88,7 +88,161 @@ You must replace <code>your_encryption_key</code> with your personal encryption 
 </aside>
 
 
-# Secure Customer Referral
+# Create Customer
+
+## POST Request
+
+> Example request for creating a customer with a dealer and VIN
+
+```ruby
+req = Net::HTTP::Post.new('https://api.roadster.com/v1/user')
+req['Authorization'] = 'your_api_key'
+req.body = {
+  user: {
+    fname: "Steve",
+    lname: "McQueen",
+    email: "steve.mcqueen@roadster.com",
+    phone: "+14155556666",
+    partner_id: "238612817"
+  },
+  dealer: {
+    partner_id: "12345",
+    dpid: "fastford"
+  },
+  vehicle: {
+    vin: "3TMKU72N16M008970",
+    make: "Ford",
+    model: "Mustang",
+    submodel: "Mustang GT Fastback",
+    year: "1968"
+  }
+}
+```
+
+```shell
+curl -d {
+  "user": {
+    "fname": "Steve",
+    "lname": "McQueen",
+    "email": "steve.mcqueen@roadster.com",
+    "phone": "+14155556666",
+    "partner_id": "238612817"
+  },
+  "dealer": {
+    "partner_id": "12345",
+    "dpid": "fastford"
+  },
+  "vehicle": {
+    "vin": "3TMKU72N16M008970",
+    "make": "Ford",
+    "model": "Mustang",
+    "submodel": "Mustang GT Fastback",
+    "year": "1968"
+  }
+} 
+-H "Authorization: your_api_key"
+POST "https://api.roadster.com/v1/user"
+```
+> Make sure to replace `your_encryption_key` with your API key.
+
+You can create a new customer in the Roadster Express Strorefront for a specified dealer using a POST to the `/user` endpoint. The response will include the unique identifier of the user as well as a unique URL to the specified piece of inventory on the dealer's site which will automatically store the provided user as active in the session.
+
+Parameter | Type | Required | Description
+----------|------|----------|------------
+**user** | **object** | **yes** | **Object including the user data**
+fname | string | yes | The user's first name
+lname | string | yes | The user's last name
+email | string | yes | The user's email address
+phone | string | no | The user's phone number (E.164 formatting is preferred)
+partner_id | string | no | A unique identifier provided by the partner to be appended to the customer record for reporting purposes.
+**dealer** | **object** | **no** | **Data to force user creation against a specific dealer. If included, one of the identifiers below must be used.**
+partner_id | string | no | Your unique identifier for the dealership (must be registered with Roadster to impact dealer selection otherwise stored as data only)
+dpid | string | no | Roadster's unique identifier for a dealership
+**vehicle** | **object** | **no** | **Object including the user's vehicle preference which will also be the resulting landing page of the returned URL.
+vin | string | no | The preferred VIN. Without this we will return search level results at a make or model level.
+make | string | no | The preferred make, this is required if there is no VIN but model or submodel info is provided.
+model | string | no | The preferred model, this is not required if a VIN or submodel is provided or make-level results are sufficient.
+submodel | string | no | The preferred submodel (taxonomy between model and trim - e.g. Civic Hybrid - not LX). Not required if a VIN is provided or model-level results are sufficient.
+year | string | no | The preferred model year, not required if a VIN is provided or the preferred search set should be limited to new.
+
+
+## Expected response
+
+> Example response with VIN
+
+```ruby
+{
+  "user_id": "2736628",
+  "redirect_url": "https://express-dealer-site/express/3TMKU72N16M008970/2hd293ehjd289",
+  "dpid": "fastford",
+  "result": {
+    "success": true,
+    "error": false,
+    "duplicate": false,
+    "message": "user successfully created"
+  }
+}
+```
+
+```shell
+{
+  "user_id": "2736628",
+  "redirect_url": "https://express-dealer-site/express/3TMKU72N16M008970/2hd293ehjd289",
+  "dpid": "fastford",
+  "result": {
+    "success": true,
+    "error": false,
+    "duplicate": false,
+    "message": "user successfully created"
+  }
+}
+```
+
+```ruby
+{
+  "user_id": "2736628",
+  "redirect_url": "https://express-dealer-site/express/3TMKU72N16M008970/2hd293ehjd289",
+  "dpid": "fastford",
+  "result": {
+    "success": true,
+    "error": false,
+    "duplicate": false,
+    "message": "user successfully created"
+  }
+}
+```
+
+> Example response without vehicle information
+
+```shell
+{
+  "user_id": "2736628",
+  "redirect_url": "https://express-dealer-site/2hd293ehjd289",
+  "dpid": "fastford",
+  "result": {
+    "success": true,
+    "error": false,
+    "duplicate": false,
+    "message": "user successfully created"
+  }
+}
+```
+
+A request to the create user endpoint will create a customer and respond with a `redirect_url` that can be used to redirect the user to a landing page on the corresponding dealer site with account active in the session and pricing unlocked. In the case that the user exists, the response will still be `success` but the `duplicate` parameter will also be true.
+
+Response field | Type | Description
+---------------|------|------------
+user_id | string | The unique identifier for the user created on the dealer's Express Storefront
+redirect_url | string | The URL of the landing page that corresponds to the grainularity of data provided in the request. When redirecting to this page will automatically log the user as the active account in the session and unlock any pricing (if applicable).
+dpid | string | The unique identifer of the dealer that the user was created against. If a dealership identifer was provided in the request, the dealer will match that request. If no dealer was provided, the dealer will result in the dealership who has the provided VIN in-stock.
+**result** | **object** | **Object containing details about the result of the request**
+success | boolean | Whether the request resulted in a successful create or update event
+error | boolean | Whether the request resulted in an error which prevented customer creation or update
+duplicate | boolean | Whether the provided customer information already existed in the dealer's Express Storefront. This will still result in a success response with a proper `redirect_url`
+message | string | Description of the response
+
+
+
 
 ## Browser-based customer submission
 
