@@ -235,8 +235,14 @@
               </ul>
           </li>
           <li>
-            <a href="#secure-customer-referral" class="toc-h1 toc-link" data-title="Secure Customer Referral">Secure Customer Referral</a>
+            <a href="#create-customer" class="toc-h1 toc-link" data-title="Create Customer">Create Customer</a>
               <ul class="toc-list-h2">
+                  <li>
+                    <a href="#post-request" class="toc-h2 toc-link" data-title="POST Request">POST Request</a>
+                  </li>
+                  <li>
+                    <a href="#expected-response" class="toc-h2 toc-link" data-title="Expected response">Expected response</a>
+                  </li>
                   <li>
                     <a href="#browser-based-customer-submission" class="toc-h2 toc-link" data-title="Browser-based customer submission">Browser-based customer submission</a>
                   </li>
@@ -313,7 +319,264 @@ Verifying - enter aes-256-cbc encryption password: your_encryption_key
 <aside class="notice">
 You must replace <code>your_encryption_key</code> with your personal encryption key.
 </aside>
-<h1 id='secure-customer-referral'>Secure Customer Referral</h1><h2 id='browser-based-customer-submission'>Browser-based customer submission</h2><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'openssl'</span>
+<h1 id='create-customer'>Create Customer</h1><h2 id='post-request'>POST Request</h2>
+<blockquote>
+<p>Example request for creating a customer with a dealer and VIN</p>
+</blockquote>
+<pre class="highlight ruby tab-ruby"><code><span class="n">req</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Post</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'https://api.roadster.com/v1/user'</span><span class="p">)</span>
+<span class="n">req</span><span class="p">[</span><span class="s1">'Authorization'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'your_api_key'</span>
+<span class="n">req</span><span class="p">.</span><span class="nf">body</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="ss">user: </span><span class="p">{</span>
+    <span class="ss">fname: </span><span class="s2">"Steve"</span><span class="p">,</span>
+    <span class="ss">lname: </span><span class="s2">"McQueen"</span><span class="p">,</span>
+    <span class="ss">email: </span><span class="s2">"steve.mcqueen@roadster.com"</span><span class="p">,</span>
+    <span class="ss">phone: </span><span class="s2">"+14155556666"</span><span class="p">,</span>
+    <span class="ss">partner_id: </span><span class="s2">"238612817"</span>
+  <span class="p">},</span>
+  <span class="ss">dealer: </span><span class="p">{</span>
+    <span class="ss">partner_id: </span><span class="s2">"12345"</span><span class="p">,</span>
+    <span class="ss">dpid: </span><span class="s2">"fastford"</span>
+  <span class="p">},</span>
+  <span class="ss">vehicle: </span><span class="p">{</span>
+    <span class="ss">vin: </span><span class="s2">"3TMKU72N16M008970"</span><span class="p">,</span>
+    <span class="ss">make: </span><span class="s2">"Ford"</span><span class="p">,</span>
+    <span class="ss">model: </span><span class="s2">"Mustang"</span><span class="p">,</span>
+    <span class="ss">submodel: </span><span class="s2">"Mustang GT Fastback"</span><span class="p">,</span>
+    <span class="ss">year: </span><span class="s2">"1968"</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight shell tab-shell"><code>curl -d <span class="o">{</span>
+  <span class="s2">"user"</span>: <span class="o">{</span>
+    <span class="s2">"fname"</span>: <span class="s2">"Steve"</span>,
+    <span class="s2">"lname"</span>: <span class="s2">"McQueen"</span>,
+    <span class="s2">"email"</span>: <span class="s2">"steve.mcqueen@roadster.com"</span>,
+    <span class="s2">"phone"</span>: <span class="s2">"+14155556666"</span>,
+    <span class="s2">"partner_id"</span>: <span class="s2">"238612817"</span>
+  <span class="o">}</span>,
+  <span class="s2">"dealer"</span>: <span class="o">{</span>
+    <span class="s2">"partner_id"</span>: <span class="s2">"12345"</span>,
+    <span class="s2">"dpid"</span>: <span class="s2">"fastford"</span>
+  <span class="o">}</span>,
+  <span class="s2">"vehicle"</span>: <span class="o">{</span>
+    <span class="s2">"vin"</span>: <span class="s2">"3TMKU72N16M008970"</span>,
+    <span class="s2">"make"</span>: <span class="s2">"Ford"</span>,
+    <span class="s2">"model"</span>: <span class="s2">"Mustang"</span>,
+    <span class="s2">"submodel"</span>: <span class="s2">"Mustang GT Fastback"</span>,
+    <span class="s2">"year"</span>: <span class="s2">"1968"</span>
+  <span class="o">}</span>
+<span class="o">}</span> 
+-H <span class="s2">"Authorization: your_api_key"</span>
+POST <span class="s2">"https://api.roadster.com/v1/user"</span>
+</code></pre>
+<blockquote>
+<p>Make sure to replace <code>your_encryption_key</code> with your API key.</p>
+</blockquote>
+
+<p>You can create a new customer in the Roadster Express Strorefront for a specified dealer using a POST to the <code>/user</code> endpoint. The response will include the unique identifier of the user as well as a unique URL to the specified piece of inventory on the dealer&#39;s site which will automatically store the provided user as active in the session.</p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><strong>user</strong></td>
+<td><strong>object</strong></td>
+<td><strong>yes</strong></td>
+<td><strong>Object including the user data</strong></td>
+</tr>
+<tr>
+<td>fname</td>
+<td>string</td>
+<td>yes</td>
+<td>The user&#39;s first name</td>
+</tr>
+<tr>
+<td>lname</td>
+<td>string</td>
+<td>yes</td>
+<td>The user&#39;s last name</td>
+</tr>
+<tr>
+<td>email</td>
+<td>string</td>
+<td>yes</td>
+<td>The user&#39;s email address</td>
+</tr>
+<tr>
+<td>phone</td>
+<td>string</td>
+<td>no</td>
+<td>The user&#39;s phone number (E.164 formatting is preferred)</td>
+</tr>
+<tr>
+<td>partner_id</td>
+<td>string</td>
+<td>no</td>
+<td>A unique identifier provided by the partner to be appended to the customer record for reporting purposes.</td>
+</tr>
+<tr>
+<td><strong>dealer</strong></td>
+<td><strong>object</strong></td>
+<td><strong>no</strong></td>
+<td><strong>Data to force user creation against a specific dealer. If included, one of the identifiers below must be used.</strong></td>
+</tr>
+<tr>
+<td>partner_id</td>
+<td>string</td>
+<td>no</td>
+<td>Your unique identifier for the dealership (must be registered with Roadster to impact dealer selection otherwise stored as data only)</td>
+</tr>
+<tr>
+<td>dpid</td>
+<td>string</td>
+<td>no</td>
+<td>Roadster&#39;s unique identifier for a dealership</td>
+</tr>
+<tr>
+<td><strong>vehicle</strong></td>
+<td><strong>object</strong></td>
+<td><strong>no</strong></td>
+<td>**Object including the user&#39;s vehicle preference which will also be the resulting landing page of the returned URL.</td>
+</tr>
+<tr>
+<td>vin</td>
+<td>string</td>
+<td>no</td>
+<td>The preferred VIN. Without this we will return search level results at a make or model level.</td>
+</tr>
+<tr>
+<td>make</td>
+<td>string</td>
+<td>no</td>
+<td>The preferred make, this is required if there is no VIN but model or submodel info is provided.</td>
+</tr>
+<tr>
+<td>model</td>
+<td>string</td>
+<td>no</td>
+<td>The preferred model, this is not required if a VIN or submodel is provided or make-level results are sufficient.</td>
+</tr>
+<tr>
+<td>submodel</td>
+<td>string</td>
+<td>no</td>
+<td>The preferred submodel (taxonomy between model and trim - e.g. Civic Hybrid - not LX). Not required if a VIN is provided or model-level results are sufficient.</td>
+</tr>
+<tr>
+<td>year</td>
+<td>string</td>
+<td>no</td>
+<td>The preferred model year, not required if a VIN is provided or the preferred search set should be limited to new.</td>
+</tr>
+</tbody></table>
+<h2 id='expected-response'>Expected response</h2>
+<blockquote>
+<p>Example response with VIN</p>
+</blockquote>
+<pre class="highlight ruby tab-ruby"><code><span class="p">{</span>
+  <span class="s2">"user_id"</span><span class="p">:</span> <span class="s2">"2736628"</span><span class="p">,</span>
+  <span class="s2">"redirect_url"</span><span class="p">:</span> <span class="s2">"https://express-dealer-site/express/3TMKU72N16M008970/2hd293ehjd289"</span><span class="p">,</span>
+  <span class="s2">"dpid"</span><span class="p">:</span> <span class="s2">"fastford"</span><span class="p">,</span>
+  <span class="s2">"result"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"success"</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span>
+    <span class="s2">"error"</span><span class="p">:</span> <span class="kp">false</span><span class="p">,</span>
+    <span class="s2">"duplicate"</span><span class="p">:</span> <span class="kp">false</span><span class="p">,</span>
+    <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"user successfully created"</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight shell tab-shell"><code><span class="o">{</span>
+  <span class="s2">"user_id"</span>: <span class="s2">"2736628"</span>,
+  <span class="s2">"redirect_url"</span>: <span class="s2">"https://express-dealer-site/express/3TMKU72N16M008970/2hd293ehjd289"</span>,
+  <span class="s2">"dpid"</span>: <span class="s2">"fastford"</span>,
+  <span class="s2">"result"</span>: <span class="o">{</span>
+    <span class="s2">"success"</span>: <span class="nb">true</span>,
+    <span class="s2">"error"</span>: <span class="nb">false</span>,
+    <span class="s2">"duplicate"</span>: <span class="nb">false</span>,
+    <span class="s2">"message"</span>: <span class="s2">"user successfully created"</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre><pre class="highlight ruby tab-ruby"><code><span class="p">{</span>
+  <span class="s2">"user_id"</span><span class="p">:</span> <span class="s2">"2736628"</span><span class="p">,</span>
+  <span class="s2">"redirect_url"</span><span class="p">:</span> <span class="s2">"https://express-dealer-site/express/3TMKU72N16M008970/2hd293ehjd289"</span><span class="p">,</span>
+  <span class="s2">"dpid"</span><span class="p">:</span> <span class="s2">"fastford"</span><span class="p">,</span>
+  <span class="s2">"result"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"success"</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span>
+    <span class="s2">"error"</span><span class="p">:</span> <span class="kp">false</span><span class="p">,</span>
+    <span class="s2">"duplicate"</span><span class="p">:</span> <span class="kp">false</span><span class="p">,</span>
+    <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"user successfully created"</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+<blockquote>
+<p>Example response without vehicle information</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="o">{</span>
+  <span class="s2">"user_id"</span>: <span class="s2">"2736628"</span>,
+  <span class="s2">"redirect_url"</span>: <span class="s2">"https://express-dealer-site/2hd293ehjd289"</span>,
+  <span class="s2">"dpid"</span>: <span class="s2">"fastford"</span>,
+  <span class="s2">"result"</span>: <span class="o">{</span>
+    <span class="s2">"success"</span>: <span class="nb">true</span>,
+    <span class="s2">"error"</span>: <span class="nb">false</span>,
+    <span class="s2">"duplicate"</span>: <span class="nb">false</span>,
+    <span class="s2">"message"</span>: <span class="s2">"user successfully created"</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+<p>A request to the create user endpoint will create a customer and respond with a <code>redirect_url</code> that can be used to redirect the user to a landing page on the corresponding dealer site with account active in the session and pricing unlocked. In the case that the user exists, the response will still be <code>success</code> but the <code>duplicate</code> parameter will also be true.</p>
+
+<table><thead>
+<tr>
+<th>Response field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>user_id</td>
+<td>string</td>
+<td>The unique identifier for the user created on the dealer&#39;s Express Storefront</td>
+</tr>
+<tr>
+<td>redirect_url</td>
+<td>string</td>
+<td>The URL of the landing page that corresponds to the grainularity of data provided in the request. When redirecting to this page will automatically log the user as the active account in the session and unlock any pricing (if applicable).</td>
+</tr>
+<tr>
+<td>dpid</td>
+<td>string</td>
+<td>The unique identifer of the dealer that the user was created against. If a dealership identifer was provided in the request, the dealer will match that request. If no dealer was provided, the dealer will result in the dealership who has the provided VIN in-stock.</td>
+</tr>
+<tr>
+<td><strong>result</strong></td>
+<td><strong>object</strong></td>
+<td><strong>Object containing details about the result of the request</strong></td>
+</tr>
+<tr>
+<td>success</td>
+<td>boolean</td>
+<td>Whether the request resulted in a successful create or update event</td>
+</tr>
+<tr>
+<td>error</td>
+<td>boolean</td>
+<td>Whether the request resulted in an error which prevented customer creation or update</td>
+</tr>
+<tr>
+<td>duplicate</td>
+<td>boolean</td>
+<td>Whether the provided customer information already existed in the dealer&#39;s Express Storefront. This will still result in a success response with a proper <code>redirect_url</code></td>
+</tr>
+<tr>
+<td>message</td>
+<td>string</td>
+<td>Description of the response</td>
+</tr>
+</tbody></table>
+<h2 id='browser-based-customer-submission'>Browser-based customer submission</h2><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'openssl'</span>
 <span class="nb">require</span> <span class="s1">'base64'</span>
 
 <span class="k">def</span> <span class="nf">aes256_cbc_encrypt</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
