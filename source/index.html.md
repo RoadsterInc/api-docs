@@ -36,13 +36,13 @@ All requests should be made using HTTPS.
 require 'net/http'
 
 req = Net::HTTP::Post.new('https://express-dealer-site/api')
-req['Authorization'] = 'your_api_key'
+req['Authorization'] = "Token #{your_api_key}"
 ```
 
 ```shell
 # With shell, you can just pass the correct header with each request
 curl "https://express-dealer-site/api"
-  -H "Authorization: your_api_key"
+  -H "Authorization: Token your_api_key"
 ```
 
 > Make sure to replace `your_api_key` with your API key and `express-dealer-site` with the hostname of the Express Store for the dealership you are attempting to access.
@@ -96,7 +96,7 @@ You must replace <code>your_encryption_key</code> with your personal encryption 
 
 ```ruby
 req = Net::HTTP::Post.new('https://api.roadster.com/v1/customers')
-req['Authorization'] = 'your_api_key'
+req['Authorization'] = "Token #{your_api_key}"
 req.body = {
   customer: {
     first_name: "Steve",
@@ -172,7 +172,7 @@ HTTP/1.1 200 OK
   "status": "ok",
   "customer": {
     "id": 1650260,
-    "redirect_url": "http://brickellmazda.roadsterlocal.com:3000/express/JM1NDAM77K0306400?ucid=1650260"
+    "redirect_url": "https://brickellmazda.roadster.com/express/JM1NDAM77K0306400?ucid=1650260"
   }
 }
 ```
@@ -183,7 +183,7 @@ HTTP/1.1 200 OK
   "status": "ok",
   "customer": {
     "id": 1650260,
-    "redirect_url": "http://brickellmazda.roadster.com/express/JM1NDAM77K0306400?ucid=1650260"
+    "redirect_url": "https://brickellmazda.roadster.com/express/JM1NDAM77K0306400?ucid=1650260"
   }
 }
 ```
