@@ -90,7 +90,7 @@ You must replace <code>your_encryption_key</code> with your personal encryption 
 
 # Create Customer
 
-## POST Request
+## POST /v1/customers
 
 > Example request for creating a customer with a dealer and VIN
 
@@ -142,7 +142,7 @@ curl 'https://api.roadster.com/v1/customers' -XPOST -d @api-post.json -H 'Author
 ```
 > Make sure to replace `your_api_key` with your API key.
 
-You can create a new customer in the Roadster Express Strorefront for a specified dealer using a POST to the `/user` endpoint. The response will include the unique identifier of the user as well as a unique URL to the specified piece of inventory on the dealer's site which will automatically store the provided user as active in the session.
+You can create a new customer in the Roadster Express Strorefront for a specified dealer using a POST to the `/customers` endpoint. The response will include the unique identifier of the user as well as a unique URL to the specified piece of inventory on the dealer's site which will automatically store the provided user as active in the session.
 
 Parameter | Type | Required | Description
 ----------|------|----------|------------
