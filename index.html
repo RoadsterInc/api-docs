@@ -323,53 +323,50 @@ You must replace <code>your_encryption_key</code> with your personal encryption 
 <blockquote>
 <p>Example request for creating a customer with a dealer and VIN</p>
 </blockquote>
-<pre class="highlight ruby tab-ruby"><code><span class="n">req</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Post</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'https://api.roadster.com/v1/user'</span><span class="p">)</span>
+<pre class="highlight ruby tab-ruby"><code><span class="n">req</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Post</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'https://api.roadster.com/v1/customers'</span><span class="p">)</span>
 <span class="n">req</span><span class="p">[</span><span class="s1">'Authorization'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'your_api_key'</span>
 <span class="n">req</span><span class="p">.</span><span class="nf">body</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="ss">user: </span><span class="p">{</span>
-    <span class="ss">fname: </span><span class="s2">"Steve"</span><span class="p">,</span>
-    <span class="ss">lname: </span><span class="s2">"McQueen"</span><span class="p">,</span>
+  <span class="ss">customer: </span><span class="p">{</span>
+    <span class="ss">first_name: </span><span class="s2">"Steve"</span><span class="p">,</span>
+    <span class="ss">last_name: </span><span class="s2">"McQueen"</span><span class="p">,</span>
     <span class="ss">email: </span><span class="s2">"steve.mcqueen@roadster.com"</span><span class="p">,</span>
     <span class="ss">phone: </span><span class="s2">"+14155556666"</span><span class="p">,</span>
     <span class="ss">partner_id: </span><span class="s2">"238612817"</span>
-  <span class="p">},</span>
-  <span class="ss">dealer: </span><span class="p">{</span>
-    <span class="ss">partner_id: </span><span class="s2">"12345"</span><span class="p">,</span>
-    <span class="ss">dpid: </span><span class="s2">"fastford"</span>
   <span class="p">},</span>
   <span class="ss">vehicle: </span><span class="p">{</span>
     <span class="ss">vin: </span><span class="s2">"3TMKU72N16M008970"</span><span class="p">,</span>
     <span class="ss">make: </span><span class="s2">"Ford"</span><span class="p">,</span>
     <span class="ss">model: </span><span class="s2">"Mustang"</span><span class="p">,</span>
-    <span class="ss">submodel: </span><span class="s2">"Mustang GT Fastback"</span><span class="p">,</span>
     <span class="ss">year: </span><span class="s2">"1968"</span>
+  <span class="p">},</span>
+  <span class="ss">dealer: </span><span class="p">{</span>
+    <span class="ss">partner_id: </span><span class="s2">"12345"</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre><pre class="highlight shell tab-shell"><code>curl -d <span class="o">{</span>
-  <span class="s2">"user"</span>: <span class="o">{</span>
-    <span class="s2">"fname"</span>: <span class="s2">"Steve"</span>,
-    <span class="s2">"lname"</span>: <span class="s2">"McQueen"</span>,
-    <span class="s2">"email"</span>: <span class="s2">"steve.mcqueen@roadster.com"</span>,
-    <span class="s2">"phone"</span>: <span class="s2">"+14155556666"</span>,
-    <span class="s2">"partner_id"</span>: <span class="s2">"238612817"</span>
-  <span class="o">}</span>,
-  <span class="s2">"dealer"</span>: <span class="o">{</span>
-    <span class="s2">"partner_id"</span>: <span class="s2">"12345"</span>,
-    <span class="s2">"dpid"</span>: <span class="s2">"fastford"</span>
+</code></pre><pre class="highlight shell tab-shell"><code>curl <span class="s1">'https://api.roadster.com/v1/customers'</span> -XPOST -d @api-post.json -H <span class="s1">'Authorization: Token your_api_key'</span> -H <span class="s1">'Content-type: application/json'</span> -i
+
+--@api-post.json
+<span class="o">{</span>
+  <span class="s2">"customer"</span>: <span class="o">{</span>
+    <span class="s2">"first_name"</span>: <span class="s2">"Ralph"</span>,
+    <span class="s2">"last_name"</span>: <span class="s2">"Dorfin"</span>,
+    <span class="s2">"email"</span>: <span class="s2">"ralf4@testing.zz"</span>,
+    <span class="s2">"phone"</span>: <span class="s2">"800-555-1234"</span>,
+    <span class="s2">"partner_id"</span>: <span class="s2">"1359"</span>
   <span class="o">}</span>,
   <span class="s2">"vehicle"</span>: <span class="o">{</span>
-    <span class="s2">"vin"</span>: <span class="s2">"3TMKU72N16M008970"</span>,
-    <span class="s2">"make"</span>: <span class="s2">"Ford"</span>,
-    <span class="s2">"model"</span>: <span class="s2">"Mustang"</span>,
-    <span class="s2">"submodel"</span>: <span class="s2">"Mustang GT Fastback"</span>,
-    <span class="s2">"year"</span>: <span class="s2">"1968"</span>
+    <span class="s2">"vin"</span>: <span class="s2">"JM1NDAM77K0306400"</span>,
+    <span class="s2">"make"</span>: <span class="s2">"Mazda"</span>,
+    <span class="s2">"model"</span>: <span class="s2">"MX-5 Miata"</span>,
+    <span class="s2">"year"</span>: <span class="s2">"2019"</span>
+  <span class="o">}</span>,
+  <span class="s2">"dealer"</span>: <span class="o">{</span>
+    <span class="s2">"partner_id"</span>: <span class="s2">"51101"</span>
   <span class="o">}</span>
-<span class="o">}</span> 
--H <span class="s2">"Authorization: your_api_key"</span>
-POST <span class="s2">"https://api.roadster.com/v1/user"</span>
+<span class="o">}</span>
 </code></pre>
 <blockquote>
-<p>Make sure to replace <code>your_encryption_key</code> with your API key.</p>
+<p>Make sure to replace <code>your_api_key</code> with your API key.</p>
 </blockquote>
 
 <p>You can create a new customer in the Roadster Express Strorefront for a specified dealer using a POST to the <code>/user</code> endpoint. The response will include the unique identifier of the user as well as a unique URL to the specified piece of inventory on the dealer&#39;s site which will automatically store the provided user as active in the session.</p>
@@ -383,19 +380,19 @@ POST <span class="s2">"https://api.roadster.com/v1/user"</span>
 </tr>
 </thead><tbody>
 <tr>
-<td><strong>user</strong></td>
+<td><strong>customer</strong></td>
 <td><strong>object</strong></td>
 <td><strong>yes</strong></td>
 <td><strong>Object including the user data</strong></td>
 </tr>
 <tr>
-<td>fname</td>
+<td>first_name</td>
 <td>string</td>
 <td>yes</td>
 <td>The user&#39;s first name</td>
 </tr>
 <tr>
-<td>lname</td>
+<td>last_name</td>
 <td>string</td>
 <td>yes</td>
 <td>The user&#39;s last name</td>
@@ -461,12 +458,6 @@ POST <span class="s2">"https://api.roadster.com/v1/user"</span>
 <td>The preferred model, this is not required if a VIN or submodel is provided or make-level results are sufficient.</td>
 </tr>
 <tr>
-<td>submodel</td>
-<td>string</td>
-<td>no</td>
-<td>The preferred submodel (taxonomy between model and trim - e.g. Civic Hybrid - not LX). Not required if a VIN is provided or model-level results are sufficient.</td>
-</tr>
-<tr>
 <td>year</td>
 <td>string</td>
 <td>no</td>
@@ -475,55 +466,37 @@ POST <span class="s2">"https://api.roadster.com/v1/user"</span>
 </tbody></table>
 <h2 id='expected-response'>Expected response</h2>
 <blockquote>
-<p>Example response with VIN</p>
+<p>Example success response</p>
 </blockquote>
-<pre class="highlight ruby tab-ruby"><code><span class="p">{</span>
-  <span class="s2">"user_id"</span><span class="p">:</span> <span class="s2">"2736628"</span><span class="p">,</span>
-  <span class="s2">"redirect_url"</span><span class="p">:</span> <span class="s2">"https://express-dealer-site/express/3TMKU72N16M008970/2hd293ehjd289"</span><span class="p">,</span>
-  <span class="s2">"dpid"</span><span class="p">:</span> <span class="s2">"fastford"</span><span class="p">,</span>
-  <span class="s2">"result"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">"success"</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span>
-    <span class="s2">"error"</span><span class="p">:</span> <span class="kp">false</span><span class="p">,</span>
-    <span class="s2">"duplicate"</span><span class="p">:</span> <span class="kp">false</span><span class="p">,</span>
-    <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"user successfully created"</span>
+<pre class="highlight ruby tab-ruby"><code><span class="no">HTTP</span><span class="o">/</span><span class="mi">1</span><span class="o">.</span><span class="mi">1</span> <span class="mi">200</span> <span class="no">OK</span>
+<span class="p">{</span>
+  <span class="s2">"status"</span><span class="p">:</span> <span class="s2">"ok"</span><span class="p">,</span>
+  <span class="s2">"customer"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"id"</span><span class="p">:</span> <span class="mi">1650260</span><span class="p">,</span>
+    <span class="s2">"redirect_url"</span><span class="p">:</span> <span class="s2">"http://brickellmazda.roadsterlocal.com:3000/express/JM1NDAM77K0306400?ucid=1650260"</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre><pre class="highlight shell tab-shell"><code><span class="o">{</span>
-  <span class="s2">"user_id"</span>: <span class="s2">"2736628"</span>,
-  <span class="s2">"redirect_url"</span>: <span class="s2">"https://express-dealer-site/express/3TMKU72N16M008970/2hd293ehjd289"</span>,
-  <span class="s2">"dpid"</span>: <span class="s2">"fastford"</span>,
-  <span class="s2">"result"</span>: <span class="o">{</span>
-    <span class="s2">"success"</span>: <span class="nb">true</span>,
-    <span class="s2">"error"</span>: <span class="nb">false</span>,
-    <span class="s2">"duplicate"</span>: <span class="nb">false</span>,
-    <span class="s2">"message"</span>: <span class="s2">"user successfully created"</span>
+</code></pre><pre class="highlight shell tab-shell"><code>HTTP/1.1 200 OK
+<span class="o">{</span>
+  <span class="s2">"status"</span>: <span class="s2">"ok"</span>,
+  <span class="s2">"customer"</span>: <span class="o">{</span>
+    <span class="s2">"id"</span>: 1650260,
+    <span class="s2">"redirect_url"</span>: <span class="s2">"http://brickellmazda.roadster.com/express/JM1NDAM77K0306400?ucid=1650260"</span>
   <span class="o">}</span>
 <span class="o">}</span>
-</code></pre><pre class="highlight ruby tab-ruby"><code><span class="p">{</span>
-  <span class="s2">"user_id"</span><span class="p">:</span> <span class="s2">"2736628"</span><span class="p">,</span>
-  <span class="s2">"redirect_url"</span><span class="p">:</span> <span class="s2">"https://express-dealer-site/express/3TMKU72N16M008970/2hd293ehjd289"</span><span class="p">,</span>
-  <span class="s2">"dpid"</span><span class="p">:</span> <span class="s2">"fastford"</span><span class="p">,</span>
-  <span class="s2">"result"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">"success"</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span>
-    <span class="s2">"error"</span><span class="p">:</span> <span class="kp">false</span><span class="p">,</span>
-    <span class="s2">"duplicate"</span><span class="p">:</span> <span class="kp">false</span><span class="p">,</span>
-    <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"user successfully created"</span>
-  <span class="p">}</span>
-<span class="p">}</span>
 </code></pre>
 <blockquote>
-<p>Example response without vehicle information</p>
+<p>Example error response</p>
 </blockquote>
-<pre class="highlight shell tab-shell"><code><span class="o">{</span>
-  <span class="s2">"user_id"</span>: <span class="s2">"2736628"</span>,
-  <span class="s2">"redirect_url"</span>: <span class="s2">"https://express-dealer-site/2hd293ehjd289"</span>,
-  <span class="s2">"dpid"</span>: <span class="s2">"fastford"</span>,
-  <span class="s2">"result"</span>: <span class="o">{</span>
-    <span class="s2">"success"</span>: <span class="nb">true</span>,
-    <span class="s2">"error"</span>: <span class="nb">false</span>,
-    <span class="s2">"duplicate"</span>: <span class="nb">false</span>,
-    <span class="s2">"message"</span>: <span class="s2">"user successfully created"</span>
-  <span class="o">}</span>
+<pre class="highlight ruby tab-ruby"><code><span class="no">HTTP</span><span class="o">/</span><span class="mi">1</span><span class="o">.</span><span class="mi">1</span> <span class="mi">400</span> <span class="no">Bad</span> <span class="no">Request</span>
+<span class="p">{</span>
+  <span class="s2">"status"</span><span class="p">:</span> <span class="s2">"error"</span><span class="p">,</span>
+  <span class="s2">"error"</span><span class="p">:</span> <span class="s2">"Missing email"</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight shell tab-shell"><code>HTTP/1.1 400 Bad Request
+<span class="o">{</span>
+  <span class="s2">"status"</span>: <span class="s2">"error"</span>,
+  <span class="s2">"error"</span>: <span class="s2">"Missing email"</span>
 <span class="o">}</span>
 </code></pre>
 <p>A request to the create user endpoint will create a customer and respond with a <code>redirect_url</code> that can be used to redirect the user to a landing page on the corresponding dealer site with account active in the session and pricing unlocked. In the case that the user exists, the response will still be <code>success</code> but the <code>duplicate</code> parameter will also be true.</p>
@@ -536,44 +509,29 @@ POST <span class="s2">"https://api.roadster.com/v1/user"</span>
 </tr>
 </thead><tbody>
 <tr>
-<td>user_id</td>
+<td>status</td>
 <td>string</td>
-<td>The unique identifier for the user created on the dealer&#39;s Express Storefront</td>
+<td>The HTTP response status</td>
+</tr>
+<tr>
+<td>error</td>
+<td>string</td>
+<td>Error message (if status of error returned)</td>
+</tr>
+<tr>
+<td><strong>customer</strong></td>
+<td><strong>object</strong></td>
+<td><strong>Object containing the customer data that was just created</strong></td>
+</tr>
+<tr>
+<td>id</td>
+<td>string</td>
+<td>The unque identifier of that customer on the Roadster platform</td>
 </tr>
 <tr>
 <td>redirect_url</td>
 <td>string</td>
 <td>The URL of the landing page that corresponds to the grainularity of data provided in the request. When redirecting to this page will automatically log the user as the active account in the session and unlock any pricing (if applicable).</td>
-</tr>
-<tr>
-<td>dpid</td>
-<td>string</td>
-<td>The unique identifer of the dealer that the user was created against. If a dealership identifer was provided in the request, the dealer will match that request. If no dealer was provided, the dealer will result in the dealership who has the provided VIN in-stock.</td>
-</tr>
-<tr>
-<td><strong>result</strong></td>
-<td><strong>object</strong></td>
-<td><strong>Object containing details about the result of the request</strong></td>
-</tr>
-<tr>
-<td>success</td>
-<td>boolean</td>
-<td>Whether the request resulted in a successful create or update event</td>
-</tr>
-<tr>
-<td>error</td>
-<td>boolean</td>
-<td>Whether the request resulted in an error which prevented customer creation or update</td>
-</tr>
-<tr>
-<td>duplicate</td>
-<td>boolean</td>
-<td>Whether the provided customer information already existed in the dealer&#39;s Express Storefront. This will still result in a success response with a proper <code>redirect_url</code></td>
-</tr>
-<tr>
-<td>message</td>
-<td>string</td>
-<td>Description of the response</td>
 </tr>
 </tbody></table>
 <h2 id='browser-based-customer-submission'>Browser-based customer submission</h2><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'openssl'</span>
