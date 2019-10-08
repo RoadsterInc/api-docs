@@ -238,7 +238,7 @@
             <a href="#create-customer" class="toc-h1 toc-link" data-title="Create Customer">Create Customer</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#post-request" class="toc-h2 toc-link" data-title="POST Request">POST Request</a>
+                    <a href="#post-v1-customers" class="toc-h2 toc-link" data-title="POST /v1/customers">POST /v1/customers</a>
                   </li>
                   <li>
                     <a href="#expected-response" class="toc-h2 toc-link" data-title="Expected response">Expected response</a>
@@ -319,7 +319,7 @@ Verifying - enter aes-256-cbc encryption password: your_encryption_key
 <aside class="notice">
 You must replace <code>your_encryption_key</code> with your personal encryption key.
 </aside>
-<h1 id='create-customer'>Create Customer</h1><h2 id='post-request'>POST Request</h2>
+<h1 id='create-customer'>Create Customer</h1><h2 id='post-v1-customers'>POST /v1/customers</h2>
 <blockquote>
 <p>Example request for creating a customer with a dealer and VIN</p>
 </blockquote>
@@ -369,7 +369,7 @@ You must replace <code>your_encryption_key</code> with your personal encryption 
 <p>Make sure to replace <code>your_api_key</code> with your API key.</p>
 </blockquote>
 
-<p>You can create a new customer in the Roadster Express Strorefront for a specified dealer using a POST to the <code>/user</code> endpoint. The response will include the unique identifier of the user as well as a unique URL to the specified piece of inventory on the dealer&#39;s site which will automatically store the provided user as active in the session.</p>
+<p>You can create a new customer in the Roadster Express Strorefront for a specified dealer using a POST to the <code>/customers</code> endpoint. The response will include the unique identifier of the user as well as a unique URL to the specified piece of inventory on the dealer&#39;s site which will automatically store the provided user as active in the session.</p>
 
 <table><thead>
 <tr>
