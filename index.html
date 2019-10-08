@@ -275,10 +275,10 @@ All requests should be made using HTTPS.
 <pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'net/http'</span>
 
 <span class="n">req</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Post</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'https://express-dealer-site/api'</span><span class="p">)</span>
-<span class="n">req</span><span class="p">[</span><span class="s1">'Authorization'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'your_api_key'</span>
+<span class="n">req</span><span class="p">[</span><span class="s1">'Authorization'</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Token </span><span class="si">#{</span><span class="n">your_api_key</span><span class="si">}</span><span class="s2">"</span>
 </code></pre><pre class="highlight shell tab-shell"><code><span class="c"># With shell, you can just pass the correct header with each request</span>
 curl <span class="s2">"https://express-dealer-site/api"</span>
-  -H <span class="s2">"Authorization: your_api_key"</span>
+  -H <span class="s2">"Authorization: Token your_api_key"</span>
 </code></pre>
 <blockquote>
 <p>Make sure to replace <code>your_api_key</code> with your API key and <code>express-dealer-site</code> with the hostname of the Express Store for the dealership you are attempting to access.</p>
@@ -324,7 +324,7 @@ You must replace <code>your_encryption_key</code> with your personal encryption 
 <p>Example request for creating a customer with a dealer and VIN</p>
 </blockquote>
 <pre class="highlight ruby tab-ruby"><code><span class="n">req</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Post</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'https://api.roadster.com/v1/customers'</span><span class="p">)</span>
-<span class="n">req</span><span class="p">[</span><span class="s1">'Authorization'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'your_api_key'</span>
+<span class="n">req</span><span class="p">[</span><span class="s1">'Authorization'</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Token </span><span class="si">#{</span><span class="n">your_api_key</span><span class="si">}</span><span class="s2">"</span>
 <span class="n">req</span><span class="p">.</span><span class="nf">body</span> <span class="o">=</span> <span class="p">{</span>
   <span class="ss">customer: </span><span class="p">{</span>
     <span class="ss">first_name: </span><span class="s2">"Steve"</span><span class="p">,</span>
@@ -473,7 +473,7 @@ You must replace <code>your_encryption_key</code> with your personal encryption 
   <span class="s2">"status"</span><span class="p">:</span> <span class="s2">"ok"</span><span class="p">,</span>
   <span class="s2">"customer"</span><span class="p">:</span> <span class="p">{</span>
     <span class="s2">"id"</span><span class="p">:</span> <span class="mi">1650260</span><span class="p">,</span>
-    <span class="s2">"redirect_url"</span><span class="p">:</span> <span class="s2">"http://brickellmazda.roadsterlocal.com:3000/express/JM1NDAM77K0306400?ucid=1650260"</span>
+    <span class="s2">"redirect_url"</span><span class="p">:</span> <span class="s2">"https://brickellmazda.roadster.com/express/JM1NDAM77K0306400?ucid=1650260"</span>
   <span class="p">}</span>
 <span class="p">}</span>
 </code></pre><pre class="highlight shell tab-shell"><code>HTTP/1.1 200 OK
@@ -481,7 +481,7 @@ You must replace <code>your_encryption_key</code> with your personal encryption 
   <span class="s2">"status"</span>: <span class="s2">"ok"</span>,
   <span class="s2">"customer"</span>: <span class="o">{</span>
     <span class="s2">"id"</span>: 1650260,
-    <span class="s2">"redirect_url"</span>: <span class="s2">"http://brickellmazda.roadster.com/express/JM1NDAM77K0306400?ucid=1650260"</span>
+    <span class="s2">"redirect_url"</span>: <span class="s2">"https://brickellmazda.roadster.com/express/JM1NDAM77K0306400?ucid=1650260"</span>
   <span class="o">}</span>
 <span class="o">}</span>
 </code></pre>
