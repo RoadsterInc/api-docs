@@ -88,6 +88,118 @@ You must replace <code>your_encryption_key</code> with your personal encryption 
 </aside>
 
 
+# Generate Express Store URL
+
+## POST /v1/links
+
+> Example request for creating a redirect URL for a dealer's Express Store
+
+```ruby
+req = Net::HTTP::Post.new('https://api.roadster.com/v1/links')
+req['Authorization'] = "Token #{your_api_key}"
+req.body = {
+  vehicle: {
+    vin: "3TMKU72N16M008970",
+    make: "Ford",
+    model: "Mustang",
+    year: "1968"
+  },
+  dealer: {
+    partner_id: "12345"
+  }
+}
+```
+
+```shell
+curl 'https://api.roadster.com/v1/links' -XPOST -d @api-post.json -H 'Authorization: Token your_api_key' -H 'Content-type: application/json' -i
+
+--@api-post.json
+{
+  "vehicle": {
+    "vin": "JM1NDAM77K0306400",
+    "make": "Mazda",
+    "model": "MX-5 Miata",
+    "year": "2019"
+  },
+  "dealer": {
+    "partner_id": "51101"
+  }
+}
+```
+> Make sure to replace `your_api_key` with your API key.
+
+You can generate a redirect link to land a customer on a vehicle details page for a specific dealership on the Roadster platform.
+
+Parameter | Type | Required | Description
+----------|------|----------|------------
+**dealer** | **object** | **yes** | **Data to force user creation against a specific dealer. One of the following identifiers must be used.**
+partner_id | string | no | Your unique identifier for the dealership (must be registered with Roadster to impact dealer selection otherwise stored as data only)
+dpid | string | no | Roadster's unique identifier for a dealership
+**vehicle** | **object** | **no** | **Object including the user's vehicle preference which will also be the resulting landing page of the returned URL.
+vin | string | no | The preferred VIN. Without this we will return search level results at a make or model level.
+make | string | no | The preferred make, this is required if there is no VIN but model or submodel info is provided.
+model | string | no | The preferred model, this is not required if a VIN or submodel is provided or make-level results are sufficient.
+year | string | no | The preferred model year, not required if a VIN is provided or the preferred search set should be limited to new.
+
+
+## Expected response
+
+> Example success response
+
+```ruby
+HTTP/1.1 200 OK
+{
+    "status": "ok",
+    "link": {
+        "dpid": "umazda",
+        "redirect_url": "https://express.umazda.com/express/3MVDMBBL5LM104427?utm_campaign=preferred-dealer&utm_medium=referral&utm_source=umazda"
+    }
+}
+```
+
+```shell
+HTTP/1.1 200 OK
+{
+    "status": "ok",
+    "link": {
+        "dpid": "umazda",
+        "redirect_url": "https://express.umazda.com/express/3MVDMBBL5LM104427?utm_campaign=preferred-dealer&utm_medium=referral&utm_source=umazda"
+    }
+}
+```
+
+
+> Example error response
+
+```ruby
+HTTP/1.1 400 Bad Request
+{
+  "status": "error",
+  "error": "Dealer not found"
+}
+```
+
+```shell
+HTTP/1.1 400 Bad Request
+{
+  "status": "error",
+  "error": "Dealer not found"
+}
+```
+
+A request to generate a link will respond with a `redirect_url` that can be used to redirect the user to a landing page on the corresponding dealer site. The resulting page could potentially be locked due to the MAAP policies of the manufacturer but the page will render based on the configurations of the chosen dealer.
+
+Response field | Type | Description
+---------------|------|------------
+status | string | The HTTP response status
+error | string | Error message (if status of error returned)
+**link** | **object** | **Object containing the dealership ID and redirect link**
+dpid | string | The unque identifier of that dealership on the Roadster platform
+redirect_url | string | The URL of the landing page that corresponds to the grainularity of data provided in the request.
+
+
+
+
 # Create Customer
 
 ## POST /v1/customers
@@ -294,4 +406,60 @@ E.g. <code>fname%3DTesting%26lname%3DBot%26email%3Dtesting%40roadster.com%26phon
 </aside>
 
 
+# Trade Valuations
+
+## POST /v1/create_tradein_offer
+
+```ruby
+req = Net::HTTP::Post.new('https://api.roadster.com/v1/create_tradein_offer')
+req['Authorization'] = "Token #{your_api_key}"
+req.body = {
+  dpid: "dealership_id",
+  email: "sample@test.com",
+  vin: "5J6RM4H72CL048584"
+  value: 1500
+}
+```
+
+```shell
+curl 'https://api.roadster.com/v1/create_tradein_offer' -XPOST -d @api-post.json -H 'Authorization: Token your_api_key' -H 'Content-type: application/json' -i
+
+--@api-post.json
+{
+  "dpid": "dealership_id",
+  "email": "sample@test.com",
+  "vin": "5J6RM4H72CL048584",
+  "value": 1500
+}
+
+```
+> Make sure to replace `your_api_key` with your API key.
+
+The creat_tradein_offer endpoint will create or update an existing trade in offer using the customer's email address, dealership and vehicle VIN as the unique identifier. If the customer already has a trade offer, this endpoint will update that offer. If the offer doesn't exist, it will create a new one.
+
+## Expected response
+
+> Example success response
+
+```ruby
+HTTP/1.1 200 OK
+{
+  "status": "ok",
+  "customer": {
+    "id": 1650260,
+    "redirect_url": "https://brickellmazda.roadster.com/express/JM1NDAM77K0306400?ucid=1650260"
+  }
+}
+```
+
+```shell
+HTTP/1.1 200 OK
+{
+  "status": "ok",
+  "customer": {
+    "id": 1650260,
+    "redirect_url": "https://brickellmazda.roadster.com/express/JM1NDAM77K0306400?ucid=1650260"
+  }
+}
+```
 
