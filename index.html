@@ -235,16 +235,38 @@
               </ul>
           </li>
           <li>
+            <a href="#generate-express-store-url" class="toc-h1 toc-link" data-title="Generate Express Store URL">Generate Express Store URL</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#post-v1-links" class="toc-h2 toc-link" data-title="POST /v1/links">POST /v1/links</a>
+                  </li>
+                  <li>
+                    <a href="#expected-response" class="toc-h2 toc-link" data-title="Expected response">Expected response</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
             <a href="#create-customer" class="toc-h1 toc-link" data-title="Create Customer">Create Customer</a>
               <ul class="toc-list-h2">
                   <li>
                     <a href="#post-v1-customers" class="toc-h2 toc-link" data-title="POST /v1/customers">POST /v1/customers</a>
                   </li>
                   <li>
-                    <a href="#expected-response" class="toc-h2 toc-link" data-title="Expected response">Expected response</a>
+                    <a href="#expected-response-2" class="toc-h2 toc-link" data-title="Expected response">Expected response</a>
                   </li>
                   <li>
                     <a href="#browser-based-customer-submission" class="toc-h2 toc-link" data-title="Browser-based customer submission">Browser-based customer submission</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#trade-valuations" class="toc-h1 toc-link" data-title="Trade Valuations">Trade Valuations</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#post-v1-create_tradein_offer" class="toc-h2 toc-link" data-title="POST /v1/create_tradein_offer">POST /v1/create_tradein_offer</a>
+                  </li>
+                  <li>
+                    <a href="#expected-response-3" class="toc-h2 toc-link" data-title="Expected response">Expected response</a>
                   </li>
               </ul>
           </li>
@@ -319,6 +341,171 @@ Verifying - enter aes-256-cbc encryption password: your_encryption_key
 <aside class="notice">
 You must replace <code>your_encryption_key</code> with your personal encryption key.
 </aside>
+<h1 id='generate-express-store-url'>Generate Express Store URL</h1><h2 id='post-v1-links'>POST /v1/links</h2>
+<blockquote>
+<p>Example request for creating a redirect URL for a dealer&#39;s Express Store</p>
+</blockquote>
+<pre class="highlight ruby tab-ruby"><code><span class="n">req</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Post</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'https://api.roadster.com/v1/links'</span><span class="p">)</span>
+<span class="n">req</span><span class="p">[</span><span class="s1">'Authorization'</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Token </span><span class="si">#{</span><span class="n">your_api_key</span><span class="si">}</span><span class="s2">"</span>
+<span class="n">req</span><span class="p">.</span><span class="nf">body</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="ss">vehicle: </span><span class="p">{</span>
+    <span class="ss">vin: </span><span class="s2">"3TMKU72N16M008970"</span><span class="p">,</span>
+    <span class="ss">make: </span><span class="s2">"Ford"</span><span class="p">,</span>
+    <span class="ss">model: </span><span class="s2">"Mustang"</span><span class="p">,</span>
+    <span class="ss">year: </span><span class="s2">"1968"</span>
+  <span class="p">},</span>
+  <span class="ss">dealer: </span><span class="p">{</span>
+    <span class="ss">partner_id: </span><span class="s2">"12345"</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight shell tab-shell"><code>curl <span class="s1">'https://api.roadster.com/v1/links'</span> -XPOST -d @api-post.json -H <span class="s1">'Authorization: Token your_api_key'</span> -H <span class="s1">'Content-type: application/json'</span> -i
+
+--@api-post.json
+<span class="o">{</span>
+  <span class="s2">"vehicle"</span>: <span class="o">{</span>
+    <span class="s2">"vin"</span>: <span class="s2">"JM1NDAM77K0306400"</span>,
+    <span class="s2">"make"</span>: <span class="s2">"Mazda"</span>,
+    <span class="s2">"model"</span>: <span class="s2">"MX-5 Miata"</span>,
+    <span class="s2">"year"</span>: <span class="s2">"2019"</span>
+  <span class="o">}</span>,
+  <span class="s2">"dealer"</span>: <span class="o">{</span>
+    <span class="s2">"partner_id"</span>: <span class="s2">"51101"</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+<blockquote>
+<p>Make sure to replace <code>your_api_key</code> with your API key.</p>
+</blockquote>
+
+<p>You can generate a redirect link to land a customer on a vehicle details page for a specific dealership on the Roadster platform.</p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><strong>dealer</strong></td>
+<td><strong>object</strong></td>
+<td><strong>yes</strong></td>
+<td><strong>Data to force user creation against a specific dealer. One of the following identifiers must be used.</strong></td>
+</tr>
+<tr>
+<td>partner_id</td>
+<td>string</td>
+<td>no</td>
+<td>Your unique identifier for the dealership (must be registered with Roadster to impact dealer selection otherwise stored as data only)</td>
+</tr>
+<tr>
+<td>dpid</td>
+<td>string</td>
+<td>no</td>
+<td>Roadster&#39;s unique identifier for a dealership</td>
+</tr>
+<tr>
+<td><strong>vehicle</strong></td>
+<td><strong>object</strong></td>
+<td><strong>no</strong></td>
+<td>**Object including the user&#39;s vehicle preference which will also be the resulting landing page of the returned URL.</td>
+</tr>
+<tr>
+<td>vin</td>
+<td>string</td>
+<td>no</td>
+<td>The preferred VIN. Without this we will return search level results at a make or model level.</td>
+</tr>
+<tr>
+<td>make</td>
+<td>string</td>
+<td>no</td>
+<td>The preferred make, this is required if there is no VIN but model or submodel info is provided.</td>
+</tr>
+<tr>
+<td>model</td>
+<td>string</td>
+<td>no</td>
+<td>The preferred model, this is not required if a VIN or submodel is provided or make-level results are sufficient.</td>
+</tr>
+<tr>
+<td>year</td>
+<td>string</td>
+<td>no</td>
+<td>The preferred model year, not required if a VIN is provided or the preferred search set should be limited to new.</td>
+</tr>
+</tbody></table>
+<h2 id='expected-response'>Expected response</h2>
+<blockquote>
+<p>Example success response</p>
+</blockquote>
+<pre class="highlight ruby tab-ruby"><code><span class="no">HTTP</span><span class="o">/</span><span class="mi">1</span><span class="o">.</span><span class="mi">1</span> <span class="mi">200</span> <span class="no">OK</span>
+<span class="p">{</span>
+    <span class="s2">"status"</span><span class="p">:</span> <span class="s2">"ok"</span><span class="p">,</span>
+    <span class="s2">"link"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"dpid"</span><span class="p">:</span> <span class="s2">"umazda"</span><span class="p">,</span>
+        <span class="s2">"redirect_url"</span><span class="p">:</span> <span class="s2">"https://express.umazda.com/express/3MVDMBBL5LM104427?utm_campaign=preferred-dealer&amp;utm_medium=referral&amp;utm_source=umazda"</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight shell tab-shell"><code>HTTP/1.1 200 OK
+<span class="o">{</span>
+    <span class="s2">"status"</span>: <span class="s2">"ok"</span>,
+    <span class="s2">"link"</span>: <span class="o">{</span>
+        <span class="s2">"dpid"</span>: <span class="s2">"umazda"</span>,
+        <span class="s2">"redirect_url"</span>: <span class="s2">"https://express.umazda.com/express/3MVDMBBL5LM104427?utm_campaign=preferred-dealer&amp;utm_medium=referral&amp;utm_source=umazda"</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+<blockquote>
+<p>Example error response</p>
+</blockquote>
+<pre class="highlight ruby tab-ruby"><code><span class="no">HTTP</span><span class="o">/</span><span class="mi">1</span><span class="o">.</span><span class="mi">1</span> <span class="mi">400</span> <span class="no">Bad</span> <span class="no">Request</span>
+<span class="p">{</span>
+  <span class="s2">"status"</span><span class="p">:</span> <span class="s2">"error"</span><span class="p">,</span>
+  <span class="s2">"error"</span><span class="p">:</span> <span class="s2">"Dealer not found"</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight shell tab-shell"><code>HTTP/1.1 400 Bad Request
+<span class="o">{</span>
+  <span class="s2">"status"</span>: <span class="s2">"error"</span>,
+  <span class="s2">"error"</span>: <span class="s2">"Dealer not found"</span>
+<span class="o">}</span>
+</code></pre>
+<p>A request to generate a link will respond with a <code>redirect_url</code> that can be used to redirect the user to a landing page on the corresponding dealer site. The resulting page could potentially be locked due to the MAAP policies of the manufacturer but the page will render based on the configurations of the chosen dealer.</p>
+
+<table><thead>
+<tr>
+<th>Response field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>status</td>
+<td>string</td>
+<td>The HTTP response status</td>
+</tr>
+<tr>
+<td>error</td>
+<td>string</td>
+<td>Error message (if status of error returned)</td>
+</tr>
+<tr>
+<td><strong>link</strong></td>
+<td><strong>object</strong></td>
+<td><strong>Object containing the dealership ID and redirect link</strong></td>
+</tr>
+<tr>
+<td>dpid</td>
+<td>string</td>
+<td>The unque identifier of that dealership on the Roadster platform</td>
+</tr>
+<tr>
+<td>redirect_url</td>
+<td>string</td>
+<td>The URL of the landing page that corresponds to the grainularity of data provided in the request.</td>
+</tr>
+</tbody></table>
 <h1 id='create-customer'>Create Customer</h1><h2 id='post-v1-customers'>POST /v1/customers</h2>
 <blockquote>
 <p>Example request for creating a customer with a dealer and VIN</p>
@@ -464,7 +651,7 @@ You must replace <code>your_encryption_key</code> with your personal encryption 
 <td>The preferred model year, not required if a VIN is provided or the preferred search set should be limited to new.</td>
 </tr>
 </tbody></table>
-<h2 id='expected-response'>Expected response</h2>
+<h2 id='expected-response-2'>Expected response</h2>
 <blockquote>
 <p>Example success response</p>
 </blockquote>
@@ -633,7 +820,51 @@ Replace the <code>express-dealer-site</code> with the hostname for the dealershi
 These parameters should be placed in a standard URL query string and URL encoded _before_ encryption.
 E.g. <code>fname%3DTesting%26lname%3DBot%26email%3Dtesting%40roadster.com%26phone%3D800-505-1000</code>
 </aside>
-<h1 id='errors'>Errors</h1>
+<h1 id='trade-valuations'>Trade Valuations</h1><h2 id='post-v1-create_tradein_offer'>POST /v1/create_tradein_offer</h2><pre class="highlight ruby tab-ruby"><code><span class="n">req</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Post</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'https://api.roadster.com/v1/create_tradein_offer'</span><span class="p">)</span>
+<span class="n">req</span><span class="p">[</span><span class="s1">'Authorization'</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Token </span><span class="si">#{</span><span class="n">your_api_key</span><span class="si">}</span><span class="s2">"</span>
+<span class="n">req</span><span class="p">.</span><span class="nf">body</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="ss">dpid: </span><span class="s2">"dealership_id"</span><span class="p">,</span>
+  <span class="ss">email: </span><span class="s2">"sample@test.com"</span><span class="p">,</span>
+  <span class="ss">vin: </span><span class="s2">"5J6RM4H72CL048584"</span>
+  <span class="ss">value: </span><span class="mi">1500</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight shell tab-shell"><code>curl <span class="s1">'https://api.roadster.com/v1/create_tradein_offer'</span> -XPOST -d @api-post.json -H <span class="s1">'Authorization: Token your_api_key'</span> -H <span class="s1">'Content-type: application/json'</span> -i
+
+--@api-post.json
+<span class="o">{</span>
+  <span class="s2">"dpid"</span>: <span class="s2">"dealership_id"</span>,
+  <span class="s2">"email"</span>: <span class="s2">"sample@test.com"</span>,
+  <span class="s2">"vin"</span>: <span class="s2">"5J6RM4H72CL048584"</span>,
+  <span class="s2">"value"</span>: 1500
+<span class="o">}</span>
+
+</code></pre>
+<blockquote>
+<p>Make sure to replace <code>your_api_key</code> with your API key.</p>
+</blockquote>
+
+<p>The creat_tradein_offer endpoint will create or update an existing trade in offer using the customer&#39;s email address, dealership and vehicle VIN as the unique identifier. If the customer already has a trade offer, this endpoint will update that offer. If the offer doesn&#39;t exist, it will create a new one.</p>
+<h2 id='expected-response-3'>Expected response</h2>
+<blockquote>
+<p>Example success response</p>
+</blockquote>
+<pre class="highlight ruby tab-ruby"><code><span class="no">HTTP</span><span class="o">/</span><span class="mi">1</span><span class="o">.</span><span class="mi">1</span> <span class="mi">200</span> <span class="no">OK</span>
+<span class="p">{</span>
+  <span class="s2">"status"</span><span class="p">:</span> <span class="s2">"ok"</span><span class="p">,</span>
+  <span class="s2">"customer"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"id"</span><span class="p">:</span> <span class="mi">1650260</span><span class="p">,</span>
+    <span class="s2">"redirect_url"</span><span class="p">:</span> <span class="s2">"https://brickellmazda.roadster.com/express/JM1NDAM77K0306400?ucid=1650260"</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight shell tab-shell"><code>HTTP/1.1 200 OK
+<span class="o">{</span>
+  <span class="s2">"status"</span>: <span class="s2">"ok"</span>,
+  <span class="s2">"customer"</span>: <span class="o">{</span>
+    <span class="s2">"id"</span>: 1650260,
+    <span class="s2">"redirect_url"</span>: <span class="s2">"https://brickellmazda.roadster.com/express/JM1NDAM77K0306400?ucid=1650260"</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre><h1 id='errors'>Errors</h1>
 <p>Roadster APIs use the following error statuses:</p>
 
 <table><thead>
